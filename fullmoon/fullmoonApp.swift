@@ -16,13 +16,23 @@ struct fullmoonApp: App {
     @StateObject var appManager = AppManager()
     @State var llm = LLMEvaluator()
     
+    private func handleIncomingURL(_ url: URL) {
+        // Handle x-callback-url from Draw Things
+        // fullmoon://callback?status=success
+        guard url.scheme == "fullmoon" else { return }
+        // App returned from Draw Things - no further action needed
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .modelContainer(for: [Thread.self, Message.self])
+                .modelContainer(for: [Thread.self, Message.self, ImagePrompt.self])
                 .environmentObject(appManager)
                 .environment(llm)
                 .environment(DeviceStat())
+                .onOpenURL { url in
+                    handleIncomingURL(url)
+                }
                 #if os(macOS) || os(visionOS)
                 .frame(minWidth: 640, maxWidth: .infinity, minHeight: 420, maxHeight: .infinity)
                 #if os(macOS)

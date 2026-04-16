@@ -34,6 +34,10 @@ struct SettingsView: View {
                         }
                         .badge(appManager.modelDisplayName(appManager.currentModelName ?? ""))
                     }
+
+                    NavigationLink(destination: DrawThingsSettingsView()) {
+                        Label("Draw Things", systemImage: "paintbrush.pointed")
+                    }
                 }
 
                 Section {

@@ -4,5 +4,20 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fullmoon</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.fullmoon.app</string>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>draw-things</string>
+	</array>
 </dict>
 </plist>

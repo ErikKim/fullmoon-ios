@@ -8,6 +8,11 @@
 import SwiftUI
 import SwiftData
 
+enum AppMode: String, CaseIterable {
+    case chat
+    case prompt
+}
+
 class AppManager: ObservableObject {
     @AppStorage("systemPrompt") var systemPrompt = "you are a helpful assistant"
     @AppStorage("appTintColor") var appTintColor: AppTintColor = .monochrome
@@ -18,6 +23,17 @@ class AppManager: ObservableObject {
     @AppStorage("shouldPlayHaptics") var shouldPlayHaptics = true
     @AppStorage("numberOfVisits") var numberOfVisits = 0
     @AppStorage("numberOfVisitsOfLastRequest") var numberOfVisitsOfLastRequest = 0
+
+    // Draw Things settings
+    @AppStorage("dtWidth") var dtWidth: Int = 768
+    @AppStorage("dtHeight") var dtHeight: Int = 768
+    @AppStorage("dtSteps") var dtSteps: Int = 30
+    @AppStorage("dtScale") var dtScale: Double = 7.5
+    @AppStorage("dtSampler") var dtSampler: String = "DPM++ 2M Karras"
+    @AppStorage("dtSeed") var dtSeed: Int = -1  // -1 = random
+
+    // Current app mode
+    @AppStorage("appMode") var appMode: AppMode = .chat
     
     var userInterfaceIdiom: LayoutType {
         #if os(visionOS)
@@ -247,7 +263,7 @@ enum AppFontWidth: String, CaseIterable {
 
 enum AppFontSize: String, CaseIterable {
     case xsmall, small, medium, large, xlarge
-    
+
     func getFontSize() -> DynamicTypeSize {
         switch self {
         case .xsmall:
@@ -261,5 +277,24 @@ enum AppFontSize: String, CaseIterable {
         case .xlarge:
             .xLarge
         }
+    }
+}
+
+@Model
+final class ImagePrompt {
+    @Attribute(.unique) var id: UUID
+    var userDescription: String
+    var positive: String
+    var negative: String
+    var timestamp: Date
+    var isFavorite: Bool
+
+    init(userDescription: String, positive: String, negative: String) {
+        self.id = UUID()
+        self.userDescription = userDescription
+        self.positive = positive
+        self.negative = negative
+        self.timestamp = Date()
+        self.isFavorite = false
     }
 }
